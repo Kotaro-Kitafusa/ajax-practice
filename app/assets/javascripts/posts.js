@@ -1,6 +1,11 @@
 $(function(){
-  $('#new_post').on('click', function(e){
-    // var new_post = $('#new_post');
+  function buildPost(post){
+    var html = `<div class="content">
+                ${post.text}
+               </div>`
+    return html;
+  }
+  $('#new_post').on('submit', function(e){
     e.preventDefault();
     var url = $(this).attr("action");
     var formData = new FormData(this);
@@ -12,6 +17,15 @@ $(function(){
       dataType: 'json',
       processData: false,
       contentType: false
+    })
+    .done(function(post){
+      var html = buildPost(post);
+      $('.contents').append(html);
+      $('#post_text').val('');
+      $('#submitbtn').removeAttr("disabled");
+    })
+    .fail(function(post){
+      alert('error~!');
     })
   })
 });
